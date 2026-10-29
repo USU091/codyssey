@@ -410,7 +410,15 @@ echo "test" > ~/codyssey/mission1/site/index.html
 
 ---
 
-## 7. 마무리
+## 7. VSCode 설치 및 Microsoft WSL 확장 추가
+
+![vscode - Github 연동 화면](https://github.com/USU091/codyssey/blob/main/mission1/screenshots/github-vscode.png)
+
+## 8. VSCode에서 WSL(Ubuntu) 연결
+
+![VSCode WSL연결 화면](https://github.com/USU091/codyssey/blob/main/mission1/screenshots/vscode-commit.png)
+
+## 9. 마무리
 
 ### 배운 점
 - **WSL2 + Ubuntu**로 Windows 위에 리눅스 개발 환경을 구축하는 전체 흐름을 익혔습니다.
