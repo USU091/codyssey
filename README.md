@@ -240,6 +240,21 @@ EXPOSE 8000
 CMD ["python3", "-m", "http.server", "8000"]
 ```
 
+
+```커스텀 포인트
+FROM ubuntu:22.04	Ubuntu 22.04를 기반으로 커스텀 이미지의 실행 환경 구성
+LABEL	이미지의 제목을 my-ubuntu-web으로 지정하여 이미지 식별 및 관리
+ENV APP_ENV=dev	개발 환경을 나타내는 환경 변수 설정
+ENV PORT=8000	웹서버 포트 정보를 환경 변수로 설정
+RUN apt-get ...	Python3와 curl을 설치하고, 패키지 목록 파일을 삭제하여 불필요한 이미지 용량을 줄임
+WORKDIR /app	컨테이너 내부의 기본 작업 디렉터리 지정
+COPY app/ /app/	호스트의 app/ 디렉터리에 있는 파일을 컨테이너로 복사
+HEALTHCHECK	HTTP 요청을 통해 웹서버의 정상 동작 여부를 확인
+EXPOSE 8000	웹서버가 사용하는 포트 8000을 명시
+CMD	컨테이너 실행 시 Python 내장 HTTP 서버를 자동으로 시작하도록 설정
+```
+
+
 ```bash
 docker build -t my-ubuntu-web:1.0 .   # Dockerfile로 이미지 빌드
 docker images                          # 빌드된 이미지 확인
