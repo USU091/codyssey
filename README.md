@@ -241,20 +241,65 @@ CMD ["python3", "-m", "http.server", "8000"]
 ```
 
 
-```custon point
-| 커스텀 포인트 | 목적 |
-|---|---|
-| `FROM ubuntu:22.04` | Ubuntu 22.04를 기반으로 커스텀 이미지의 실행 환경 구성 |
-| `LABEL` | 이미지 제목을 `my-ubuntu-web`으로 지정하여 이미지 식별 및 관리 |
-| `ENV APP_ENV=dev` | 개발 환경을 나타내는 환경 변수 설정 |
-| `ENV PORT=8000` | 웹서버 포트 정보를 환경 변수로 설정 |
-| `RUN apt-get ...` | Python3와 curl을 설치하고, 패키지 목록 파일을 삭제하여 불필요한 이미지 용량 감소 |
-| `WORKDIR /app` | 컨테이너 내부의 기본 작업 디렉터리를 `/app`으로 설정 |
-| `COPY app/ /app/` | 호스트의 `app/` 디렉터리에 있는 파일을 컨테이너 내부로 복사 |
-| `HEALTHCHECK` | HTTP 요청을 통해 웹서버의 정상 동작 여부 확인 |
-| `EXPOSE 8000` | 웹서버가 사용하는 포트 8000을 명시 |
-| `CMD` | 컨테이너 실행 시 Python 내장 HTTP 서버가 자동으로 시작되도록 설정 |
+커스텀 포인트별 목적
+
+**① 베이스 이미지 설정**
+```dockerfile
+FROM ubuntu:22.04
 ```
+- Ubuntu 22.04를 기반으로 프로젝트에 필요한 실행 환경 확보
+
+**② 패키지 설치**
+```dockerfile
+RUN apt-get update && apt-get install -y python3 curl && rm -rf /var/lib/apt/lists/*
+```
+- Python3와 curl을 설치하여 웹서버 실행 및 HTTP 상태 확인에 활용
+- 불필요한 패키지 목록 파일을 삭제하여 이미지 용량 감소
+
+**③ 작업 디렉터리 설정**
+```dockerfile
+WORKDIR /app
+```
+- 컨테이너 내부의 기본 작업 디렉터리를 `/app`으로 지정
+
+**④ 프로젝트 파일 복사**
+```dockerfile
+COPY app/ /app/
+```
+- 호스트의 프로젝트 파일을 컨테이너 내부로 복사
+
+**⑤ 포트 설정**
+```dockerfile
+EXPOSE 8000
+```
+- 웹서버가 사용하는 포트 8000을 명시
+
+**⑥ 컨테이너 실행 명령 설정**
+```dockerfile
+CMD ["python3", "-m", "http.server", "8000"]
+```
+- 컨테이너 실행 시 Python 내장 HTTP 서버가 자동으로 시작되도록 구성
+
+**⑦ 환경 변수 설정**
+```dockerfile
+ENV APP_ENV=dev
+ENV PORT=8000
+```
+- `APP_ENV`: 개발 환경을 나타내는 환경 변수 설정
+- `PORT`: 웹서버 포트 번호를 환경 변수로 설정
+
+**⑧ 이미지 메타데이터 설정**
+```dockerfile
+LABEL org.opencontainers.image.title="my-ubuntu-web"
+```
+- 이미지 제목을 지정하여 이미지 식별 및 관리에 활용
+
+**⑨ 헬스체크 설정**
+```dockerfile
+HEALTHCHECK --interval=10s --timeout=3s CMD curl -f http://localhost:8000/ || exit 1
+```
+- 10초 간격으로 HTTP 요청을 보내 웹서버의 정상 동작 여부 확인
+
 
 
 ```bash
