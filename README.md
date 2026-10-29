@@ -224,6 +224,7 @@ docker ps -a            # 실행 이력(종료된 컨테이너 포함) 확인
 
 ### 5-4. Dockerfile 빌드 및 실행
 
+선택 기준 : (B) Linux 베이스 이미지 활용을 선택했습니다. 해당 이미지에 Python 웹서버와 헬스체크 기능을 추가하여 커스텀 이미지를 제작하였습니다. Ubuntu Linux 환경에서 필요한 패키지를 직접 설치하였습니다. 
 `ubuntu:22.04` 베이스 이미지에 Python 웹서버(`http.server`)를 올려 직접 이미지를 빌드했습니다.
 
 ```dockerfile
