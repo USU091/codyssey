@@ -12,6 +12,7 @@
 | OS | Windows + **WSL2 (Ubuntu 26.04.1 LTS)** |
 | 셸 | bash |
 | 버전 관리 | Git 2.53.0 |
+| 컨테이너 | Docker 29.9.2 |
 | 원격 저장소 | https://github.com/USU091/codyssey |
 
 ### 0-1. 진행 체크리스트
@@ -23,7 +24,7 @@
 - [x] 터미널 기본 명령어 실습
 - [x] 파일 권한 실습
 - [x] Git 설정 · 커밋 · 푸시
-- [ ] Docker 설치 및 실습 (예정)
+- [x] Docker 설치 및 기본 실습
 
 ---
 
@@ -68,7 +69,19 @@ git commit -m "first commit"
 git push origin main
 ```
 
-### 2-4. 설정 점검 (`git config --list`)
+### 2-4. 자격증명 저장 설정
+
+- 매번 아이디/토큰을 입력하지 않도록 credential helper를 **저장소 단위**로 설정했습니다.
+- 첫 push 때 1회 입력하면 이후에는 자동으로 인증됩니다.
+
+```bash
+git config --local credential.helper store
+```
+
+> 🔒 자격증명은 원격 URL이 아닌 별도 파일(`~/.git-credentials`)에 저장되며,
+> 저장소 URL 자체에는 토큰이 포함되지 않음을 확인했습니다.
+
+### 2-5. 설정 점검 (`git config --list`)
 
 ```text
 core.repositoryformatversion=0
@@ -132,14 +145,41 @@ chmod 700 디렉토리명
 
 ---
 
-## 5. Docker 설치 (예정)
+## 5. Docker 설치 및 실습
 
-> Ubuntu(WSL2) 환경에 **Docker Engine을 직접 설치**할 예정입니다.
-> (sudo 권한으로 공식 저장소를 추가하여 설치하는 방식)
+Ubuntu(WSL2) 환경에 **Docker Engine**을 공식 저장소를 통해 직접 설치했습니다.
 
-- [ ] `docker --version` 버전 확인
-- [ ] `docker info` 데몬 동작 확인
-- [ ] `hello-world` 실행
+### 5-1. 설치 및 동작 확인
+
+```bash
+docker --version       # Docker version 29.9.2
+docker info            # 데몬 정상 동작 확인
+docker run hello-world # 설치 검증용 컨테이너 실행 성공
+```
+
+### 5-2. sudo 없이 docker 실행 설정
+
+현재 사용자를 `docker` 그룹에 추가하여 `sudo` 없이 명령을 실행하도록 설정했습니다.
+
+```bash
+sudo usermod -aG docker $USER
+# 적용을 위해 재로그인(또는 셸 재시작) 후 확인
+```
+
+### 5-3. 컨테이너 실행 실습
+
+```bash
+docker run -it ubuntu   # ubuntu 컨테이너 진입 (내부에서 ls / echo 실행 후 종료)
+docker ps -a            # 실행 이력(종료된 컨테이너 포함) 확인
+```
+
+| 명령어 | 설명 |
+|--------|------|
+| `docker run -it` | 컨테이너를 대화형(interactive) 모드로 실행 |
+| `docker ps -a` | 전체 컨테이너 목록(종료된 것 포함) 출력 |
+
+### 5-4. 다음 단계 (진행 예정)
+
 - [ ] Dockerfile 빌드 / 실행
 - [ ] 포트 매핑 접속
 - [ ] 바인드 마운트 반영
